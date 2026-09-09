@@ -1,0 +1,60 @@
+<%- include('../partials/head', { title: 'Leads — Admin' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'admin', label: 'Dispatch' }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/admin-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1>All Leads</h1>
+          <div class="dash-sub"><%= leads.length %> logged total</div>
+        </div>
+        <a href="/admin/leads/new" class="btn">+ Log New Lead</a>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body tight table-scroll">
+          <% if (leads.length === 0) { %>
+            <div class="empty-state">No leads logged yet. <a href="/admin/leads/new" style="color:var(--accent);">Log the first one.</a></div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Received</th>
+                  <th>Client</th>
+                  <th>Job Type</th>
+                  <th>Coverage</th>
+                  <th>Contact</th>
+                  <th>Phone</th>
+                  <th class="text-right">Wholesale</th>
+                  <th class="text-right">Resale</th>
+                  <th class="text-right">Margin</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% leads.forEach(lead => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(lead.received_at) %></td>
+                    <td><%= lead.business_name %></td>
+                    <td><%= lead.job_type %></td>
+                    <td><%= lead.coverage_area %></td>
+                    <td><%= lead.contact_name %></td>
+                    <td class="mono"><%= lead.contact_phone %></td>
+                    <td class="text-right mono"><%= fmt.money(lead.wholesale_cost_cents) %></td>
+                    <td class="text-right mono"><%= fmt.money(lead.resale_cost_cents) %></td>
+                    <td class="text-right mono text-live"><%= fmt.money(lead.resale_cost_cents - lead.wholesale_cost_cents) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

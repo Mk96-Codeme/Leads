@@ -1,0 +1,119 @@
+<%- include('../partials/head', { title: 'Dispatch Overview — Admin' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'admin', label: 'Dispatch' }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/admin-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1>Overview</h1>
+          <div class="dash-sub">Everything that's moved through dispatch recently</div>
+        </div>
+        <a href="/admin/leads/new" class="btn">+ Log New Lead</a>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-cell">
+          <div class="stat-num"><%= stats.activeClients %></div>
+          <div class="stat-label">Active Clients</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= stats.leadsLast7 %></div>
+          <div class="stat-label">Leads, last 7 days</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= stats.newInterest %></div>
+          <div class="stat-label">New applications</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= fmt.money(stats.marginLast30Cents) %></div>
+          <div class="stat-label">Margin, last 30 days</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:24px;">
+        <div class="panel-head">
+          <h2 class="panel-title">Recent Leads</h2>
+          <a href="/admin/leads" style="font-size:12px; color:var(--accent); text-decoration:none;">View all →</a>
+        </div>
+        <div class="panel-body tight table-scroll">
+          <% if (recentLeads.length === 0) { %>
+            <div class="empty-state">No leads logged yet. <a href="/admin/leads/new" style="color:var(--accent);">Log the first one.</a></div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Received</th>
+                  <th>Client</th>
+                  <th>Job Type</th>
+                  <th>Coverage</th>
+                  <th class="text-right">Wholesale</th>
+                  <th class="text-right">Resale</th>
+                  <th class="text-right">Margin</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentLeads.forEach(lead => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(lead.received_at) %></td>
+                    <td><%= lead.business_name %></td>
+                    <td><%= lead.job_type %></td>
+                    <td><%= lead.coverage_area %></td>
+                    <td class="text-right mono"><%= fmt.money(lead.wholesale_cost_cents) %></td>
+                    <td class="text-right mono"><%= fmt.money(lead.resale_cost_cents) %></td>
+                    <td class="text-right mono text-live"><%= fmt.money(lead.resale_cost_cents - lead.wholesale_cost_cents) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">Recent Applications</h2>
+          <a href="/admin/interest" style="font-size:12px; color:var(--accent); text-decoration:none;">View all →</a>
+        </div>
+        <div class="panel-body tight table-scroll">
+          <% if (recentInterest.length === 0) { %>
+            <div class="empty-state">No applications yet.</div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Submitted</th>
+                  <th>Business</th>
+                  <th>Coverage Area</th>
+                  <th>Bundle</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% recentInterest.forEach(s => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(s.created_at) %></td>
+                    <td><%= s.business_name %></td>
+                    <td><%= s.coverage_area %></td>
+                    <td><%= fmt.BUNDLE_LABELS[s.bundle_interest] || s.bundle_interest %></td>
+                    <td>
+                      <% if (s.status === 'new') { %><span class="tag tag-accent">New</span>
+                      <% } else if (s.status === 'converted') { %><span class="tag tag-live">Converted</span>
+                      <% } else if (s.status === 'dismissed') { %><span class="tag">Dismissed</span>
+                      <% } else { %><span class="tag tag-warn">Contacted</span><% } %>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

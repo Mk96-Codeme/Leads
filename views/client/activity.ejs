@@ -1,0 +1,67 @@
+<%- include('../partials/head', { title: 'Activity Log — DispatchLeads' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'client', label: client.business_name }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/client-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1>Activity Log</h1>
+          <div class="dash-sub">Running transaction history for <%= client.business_name %></div>
+        </div>
+        <div class="stat-cell" style="border:1px solid var(--border); background:var(--bg-panel);">
+          <div class="stat-num"><%= fmt.money(balanceCents) %></div>
+          <div class="stat-label">Total charged, all-time</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title">Transactions</h2>
+          <span class="text-faint mono" style="font-size:11px;">newest first</span>
+        </div>
+        <div class="panel-body tight table-scroll">
+          <% if (transactions.length === 0) { %>
+            <div class="empty-state">No activity yet.</div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Description</th>
+                  <th class="text-right">Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% transactions.forEach(t => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(t.created_at) %></td>
+                    <td>
+                      <% if (t.type === 'lead_charge') { %>
+                        <span class="tag tag-accent">Lead Charge</span>
+                      <% } else if (t.type === 'adjustment') { %>
+                        <span class="tag tag-warn">Adjustment</span>
+                      <% } else { %>
+                        <span class="tag">Note</span>
+                      <% } %>
+                    </td>
+                    <td><%= t.description %></td>
+                    <td class="text-right mono"><%= fmt.money(t.amount_cents) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <%- include('../partials/footer') %>
+</div>
+</body>
+</html>

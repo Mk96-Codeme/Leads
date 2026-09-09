@@ -1,0 +1,83 @@
+<%- include('partials/head', { title: 'Apply for Coverage — DispatchLeads' }) %>
+<body>
+<div class="site">
+  <%- include('partials/marketing-nav') %>
+
+  <main class="site-main">
+    <section class="section" style="border-bottom:none; padding-top:56px;">
+      <div class="wrap" style="max-width:640px;">
+        <div class="section-kicker">// interest form</div>
+        <h2>Apply for coverage</h2>
+        <p style="margin-bottom:28px;">
+          This isn't a signup — it's a heads-up. Tell us where you work and what you run, and we'll
+          follow up by email or phone with pricing and payment instructions. Your login only gets
+          created after that's sorted out.
+        </p>
+
+        <% if (submitted) { %>
+          <div class="form-success">
+            <strong>Got it — application received.</strong><br>
+            We review these by hand, so expect a reply within one business day at the email or number you gave us.
+          </div>
+          <a href="/" class="btn btn-outline">Back to Home</a>
+        <% } else { %>
+
+          <% if (errors && errors.length) { %>
+            <div class="form-errors">
+              <strong>Fix the following:</strong>
+              <ul>
+                <% errors.forEach(e => { %><li><%= e %></li><% }) %>
+              </ul>
+            </div>
+          <% } %>
+
+          <form method="POST" action="/apply" class="panel" style="padding:26px;">
+            <div class="field-row">
+              <div class="field">
+                <label for="name">Your name</label>
+                <input type="text" id="name" name="name" value="<%= values.name || '' %>" required>
+              </div>
+              <div class="field">
+                <label for="business_name">Business name</label>
+                <input type="text" id="business_name" name="business_name" value="<%= values.business_name || '' %>" required>
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" value="<%= values.email || '' %>" required>
+              </div>
+              <div class="field">
+                <label for="phone">Phone</label>
+                <input type="tel" id="phone" name="phone" value="<%= values.phone || '' %>" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="coverage_area">Coverage area</label>
+              <input type="text" id="coverage_area" name="coverage_area" placeholder="e.g. Dallas-Fort Worth metro, TX" value="<%= values.coverage_area || '' %>" required>
+            </div>
+            <div class="field">
+              <label for="bundle_interest">Bundle you're interested in</label>
+              <select id="bundle_interest" name="bundle_interest">
+                <option value="" <%= !values.bundle_interest ? 'selected' : '' %> disabled>Choose one...</option>
+                <% bundles.forEach(b => { %>
+                  <option value="<%= b.id %>" <%= values.bundle_interest === b.id ? 'selected' : '' %>><%= b.name %> — <%= b.volume %></option>
+                <% }) %>
+                <option value="unsure" <%= values.bundle_interest === 'unsure' ? 'selected' : '' %>>Not sure yet</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="message">Anything else we should know? (optional)</label>
+              <textarea id="message" name="message"><%= values.message || '' %></textarea>
+            </div>
+            <button type="submit" class="btn btn-block">Submit Application</button>
+          </form>
+        <% } %>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+</div>
+</body>
+</html>

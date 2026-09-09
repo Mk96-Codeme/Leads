@@ -1,0 +1,18 @@
+<%
+  // locals expected: role ('client' | 'admin'), label (display name for the account)
+%>
+<header class="topnav">
+  <div class="wrap topnav-inner">
+    <a href="<%= role === 'admin' ? '/admin' : '/dashboard' %>" class="brand">
+      <span class="brand-mark"></span>
+      DispatchLeads
+      <span class="brand-sub"><%= role === 'admin' ? 'DISPATCH-ADMIN' : 'CLIENT-01' %></span>
+    </a>
+    <nav class="navlinks">
+      <span class="text-faint mono" style="font-size:12px; margin-right:8px;"><%= label %></span>
+      <form method="POST" action="<%= role === 'admin' ? '/admin/logout' : '/logout' %>" style="margin:0;">
+        <button type="submit" class="btn btn-outline btn-sm">Log Out</button>
+      </form>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,36 @@
+<%- include('partials/head', { title: 'Client Login — DispatchLeads' }) %>
+<body>
+<div class="site">
+  <%- include('partials/marketing-nav') %>
+
+  <div class="auth-shell">
+    <div class="auth-box">
+      <h1>Client Login</h1>
+      <p class="auth-sub">Credentials are issued by dispatch after your first payment. No self-serve signup.</p>
+
+      <% if (error) { %>
+        <div class="form-errors"><%= error %></div>
+      <% } %>
+
+      <form method="POST" action="/login">
+        <input type="hidden" name="next" value="<%= next %>">
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" required autofocus>
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-block">Log In</button>
+      </form>
+      <p class="field-hint" style="margin-top:18px;">
+        Don't have a login yet? <a href="/apply" style="color:var(--accent);">Apply for coverage</a> and we'll set one up once you're onboard.
+      </p>
+    </div>
+  </div>
+
+  <%- include('partials/footer') %>
+</div>
+</body>
+</html>

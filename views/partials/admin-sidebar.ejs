@@ -1,0 +1,16 @@
+<aside class="dash-sidebar">
+  <div class="dash-sidebar-group">
+    <div class="dash-sidebar-label">Dispatch</div>
+    <a href="/admin" class="<%= page === 'admin-dashboard' ? 'active' : '' %>">Overview</a>
+    <a href="/admin/leads" class="<%= page === 'admin-leads' || page === 'admin-lead-new' ? 'active' : '' %>">Leads</a>
+    <a href="/admin/interest" class="<%= page === 'admin-interest' ? 'active' : '' %>">Applications</a>
+  </div>
+  <div class="dash-sidebar-group">
+    <div class="dash-sidebar-label">Accounts</div>
+    <a href="/admin/clients" class="<%= page === 'admin-clients' || page === 'admin-client-new' || page === 'admin-client-detail' ? 'active' : '' %>">Clients</a>
+  </div>
+  <div class="dash-sidebar-group">
+    <div class="dash-sidebar-label">Site</div>
+    <a href="/">Marketing Site</a>
+  </div>
+</aside>

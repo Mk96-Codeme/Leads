@@ -1,0 +1,60 @@
+<%- include('../partials/head', { title: 'Clients — Admin' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'admin', label: 'Dispatch' }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/admin-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1>Clients</h1>
+          <div class="dash-sub"><%= clients.length %> total</div>
+        </div>
+        <a href="/admin/clients/new" class="btn">+ New Client</a>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body tight table-scroll">
+          <% if (clients.length === 0) { %>
+            <div class="empty-state">No clients yet. <a href="/admin/clients/new" style="color:var(--accent);">Create the first one.</a></div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Business</th>
+                  <th>Contact</th>
+                  <th>Coverage Area</th>
+                  <th>Bundle</th>
+                  <th>Leads</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <% clients.forEach(c => { %>
+                  <tr>
+                    <td><%= c.business_name %></td>
+                    <td><%= c.contact_name %></td>
+                    <td><%= c.coverage_area %></td>
+                    <td><%= fmt.BUNDLE_LABELS[c.bundle] || c.bundle %></td>
+                    <td class="mono"><%= leadCounts[c.id] || 0 %></td>
+                    <td>
+                      <% if (c.status === 'active') { %><span class="tag tag-live">Active</span>
+                      <% } else if (c.status === 'paused') { %><span class="tag tag-warn">Paused</span>
+                      <% } else { %><span class="tag tag-danger">Canceled</span><% } %>
+                    </td>
+                    <td><a href="/admin/clients/<%= c.id %>" style="color:var(--accent); text-decoration:none; font-size:12px;">Manage →</a></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

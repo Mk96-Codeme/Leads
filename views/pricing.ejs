@@ -1,0 +1,63 @@
+<%- include('partials/head', { title: 'Bundle Pricing — DispatchLeads' }) %>
+<body>
+<div class="site">
+  <%- include('partials/marketing-nav') %>
+
+  <main class="site-main">
+    <section class="section" style="padding-top:56px;">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">// bundles</div>
+            <h2>Pick a lane. Scale when you're ready.</h2>
+            <p class="mt-0" style="max-width:60ch;">
+              Every bundle is billed per lead delivered — no monthly minimum on Starter, no contracts.
+              Pricing below is what you pay; what we pay upstream is our business, not yours.
+            </p>
+          </div>
+        </div>
+
+        <div class="pricing-grid">
+          <% bundles.forEach(b => { %>
+            <div class="pricing-card <%= b.featured ? 'featured' : '' %>">
+              <div class="pricing-name"><%= b.name %></div>
+              <div class="pricing-tagline"><%= b.tagline %></div>
+              <div class="pricing-price"><%= b.priceLabel %></div>
+              <div class="pricing-price-unit"><%= b.priceUnit %></div>
+              <div class="pricing-volume"><%= b.volume %></div>
+              <ul class="pricing-features">
+                <% b.features.forEach(f => { %>
+                  <li><%= f %></li>
+                <% }) %>
+              </ul>
+              <a href="/apply?bundle=<%= b.id %>" class="btn <%= b.featured ? '' : 'btn-outline' %> btn-block">Apply for <%= b.name %></a>
+            </div>
+          <% }) %>
+        </div>
+
+        <p class="field-hint" style="margin-top:18px;">
+          Exact per-lead pricing depends on job-type mix and coverage density in your area — we confirm
+          your rate before you pay anything.
+        </p>
+      </div>
+    </section>
+
+    <section class="section" style="border-bottom:none;">
+      <div class="wrap">
+        <div class="panel">
+          <div class="panel-body" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px; padding:36px;">
+            <div>
+              <h2 style="margin-bottom:6px;">Not sure which bundle fits?</h2>
+              <p class="mb-0">Apply and tell us your coverage area — we'll recommend a bundle when we follow up.</p>
+            </div>
+            <a href="/apply" class="btn">Apply For Coverage</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+</div>
+</body>
+</html>

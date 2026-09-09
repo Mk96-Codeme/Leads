@@ -1,0 +1,139 @@
+<%- include('../partials/head', { title: client.business_name + ' — Admin' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'admin', label: 'Dispatch' }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/admin-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1><%= client.business_name %></h1>
+          <div class="dash-sub"><%= client.contact_name %> &middot; <%= client.coverage_area %></div>
+        </div>
+        <div>
+          <% if (client.status === 'active') { %><span class="tag tag-live">Active</span>
+          <% } else if (client.status === 'paused') { %><span class="tag tag-warn">Paused</span>
+          <% } else { %><span class="tag tag-danger">Canceled</span><% } %>
+        </div>
+      </div>
+
+      <% if (typeof newPassword !== 'undefined' && newPassword) { %>
+        <div class="form-success">
+          <strong>Password reset.</strong> New login for <%= client.username %>:
+          <div class="mono" style="margin-top:8px; font-size:15px;"><strong><%= newPassword %></strong></div>
+        </div>
+      <% } %>
+
+      <div class="stat-row cols-3" style="margin-bottom:24px;">
+        <div class="stat-cell">
+          <div class="stat-num mono"><%= client.username %></div>
+          <div class="stat-label">Username</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= fmt.BUNDLE_LABELS[client.bundle] || client.bundle %></div>
+          <div class="stat-label">Bundle</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= leads.length %></div>
+          <div class="stat-label">Leads all-time</div>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:24px;">
+        <div class="panel-head">
+          <h2 class="panel-title">Account Controls</h2>
+        </div>
+        <div class="panel-body" style="display:flex; gap:24px; flex-wrap:wrap;">
+          <form method="POST" action="/admin/clients/<%= client.id %>/status">
+            <label for="status">Change status</label>
+            <div style="display:flex; gap:8px;">
+              <select id="status" name="status" style="width:auto;">
+                <option value="active" <%= client.status === 'active' ? 'selected' : '' %>>Active</option>
+                <option value="paused" <%= client.status === 'paused' ? 'selected' : '' %>>Paused</option>
+                <option value="canceled" <%= client.status === 'canceled' ? 'selected' : '' %>>Canceled</option>
+              </select>
+              <button type="submit" class="btn btn-outline btn-sm">Update</button>
+            </div>
+          </form>
+          <form method="POST" action="/admin/clients/<%= client.id %>/reset-password">
+            <label>&nbsp;</label>
+            <button type="submit" class="btn btn-outline btn-sm">Reset Password</button>
+          </form>
+          <div>
+            <label>&nbsp;</label>
+            <a href="/admin/leads/new" class="btn btn-sm">+ Log Lead For This Client</a>
+          </div>
+        </div>
+        <% if (client.notes) { %>
+          <div class="panel-body" style="border-top:1px solid var(--border);">
+            <label class="mb-0">Internal notes</label>
+            <p class="mb-0"><%= client.notes %></p>
+          </div>
+        <% } %>
+      </div>
+
+      <div class="panel" style="margin-bottom:24px;">
+        <div class="panel-head"><h2 class="panel-title">Leads</h2></div>
+        <div class="panel-body tight table-scroll">
+          <% if (leads.length === 0) { %>
+            <div class="empty-state">No leads logged for this client yet.</div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Received</th>
+                  <th>Job Type</th>
+                  <th>Coverage</th>
+                  <th>Contact</th>
+                  <th class="text-right">Wholesale</th>
+                  <th class="text-right">Resale</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% leads.forEach(lead => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(lead.received_at) %></td>
+                    <td><%= lead.job_type %></td>
+                    <td><%= lead.coverage_area %></td>
+                    <td><%= lead.contact_name %> &middot; <span class="mono"><%= lead.contact_phone %></span></td>
+                    <td class="text-right mono"><%= fmt.money(lead.wholesale_cost_cents) %></td>
+                    <td class="text-right mono"><%= fmt.money(lead.resale_cost_cents) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head"><h2 class="panel-title">Transactions</h2></div>
+        <div class="panel-body tight table-scroll">
+          <% if (transactions.length === 0) { %>
+            <div class="empty-state">No transactions yet.</div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr><th>Date</th><th>Type</th><th>Description</th><th class="text-right">Amount</th></tr>
+              </thead>
+              <tbody>
+                <% transactions.forEach(t => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(t.created_at) %></td>
+                    <td><%= t.type %></td>
+                    <td><%= t.description %></td>
+                    <td class="text-right mono"><%= fmt.money(t.amount_cents) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>

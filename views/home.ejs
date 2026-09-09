@@ -1,0 +1,148 @@
+<%- include('partials/head', { title: 'DispatchLeads — Locksmith leads, dispatched straight to you' }) %>
+<body>
+<div class="site">
+  <%- include('partials/marketing-nav') %>
+
+  <main class="site-main">
+
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">// nationwide lead dispatch for locksmiths</div>
+          <h1>Jobs land in your queue<br><span class="accent">before your coffee's cold.</span></h1>
+          <p class="hero-sub">
+            We buy locksmith leads wholesale, vet them, and route each one to the right shop
+            by coverage area. No lead touches a client until it's passed through dispatch — you
+            just show up and work.
+          </p>
+          <div class="hero-actions">
+            <a href="/apply" class="btn">Apply For Coverage</a>
+            <a href="/pricing" class="btn btn-outline">See Bundle Pricing</a>
+          </div>
+          <div class="hero-stats">
+            <div>
+              <div class="hero-stat-num">8 yrs</div>
+              <div class="hero-stat-label">Running dispatch</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">&lt; 15 min</div>
+              <div class="hero-stat-label">Avg. lead delivery</div>
+            </div>
+            <div>
+              <div class="hero-stat-num">1 owner</div>
+              <div class="hero-stat-label">Every lead reviewed by hand</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feed-panel">
+          <div class="feed-panel-head">
+            <span class="live-label"><span class="live-dot"></span>Example Feed</span>
+            <span class="feed-note">what your dashboard looks like</span>
+          </div>
+          <div class="feed-scroll">
+            <div class="feed-track">
+              <% const feedItems = [
+                { time: '08:14', job: 'Residential Lockout', area: 'Clearwater, FL', cost: '$32.00' },
+                { time: '08:41', job: 'Car Key Fob Programming', area: 'Tampa, FL', cost: '$41.00' },
+                { time: '09:02', job: 'Commercial Rekey', area: 'Plano, TX', cost: '$55.00' },
+                { time: '09:37', job: 'Deadbolt Installation', area: 'Aurora, CO', cost: '$28.00' },
+                { time: '10:05', job: 'Safe Lockout', area: 'Columbus, OH', cost: '$48.00' },
+                { time: '10:22', job: 'Broken Key Extraction', area: 'Mesa, AZ', cost: '$26.00' },
+                { time: '10:58', job: 'Auto Lockout', area: 'Raleigh, NC', cost: '$30.00' },
+                { time: '11:15', job: 'High-Security Rekey', area: 'Tacoma, WA', cost: '$52.00' },
+              ]; %>
+              <% for (let pass = 0; pass < 2; pass++) { %>
+                <% feedItems.forEach(item => { %>
+                  <div class="feed-item">
+                    <div class="feed-item-time mono"><%= item.time %></div>
+                    <div class="feed-item-body">
+                      <strong><%= item.job %></strong>
+                      <span><%= item.area %></span>
+                    </div>
+                    <div class="feed-item-cost"><%= item.cost %></div>
+                  </div>
+                <% }) %>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">// how dispatch works</div>
+            <h2>Three steps. No middleman contact.</h2>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="feature">
+            <span class="num">01</span>
+            <h3>We buy the lead</h3>
+            <p>Leads come in from vetted wholesale sources across the country. We review every one before it goes anywhere.</p>
+          </div>
+          <div class="feature">
+            <span class="num">02</span>
+            <h3>Dispatch assigns it</h3>
+            <p>Each lead is matched to a client by coverage area and job type, marked up once, and pushed to that account only.</p>
+          </div>
+          <div class="feature">
+            <span class="num">03</span>
+            <h3>You get the job</h3>
+            <p>Full contact info lands in your dashboard the moment it's assigned. Call the customer, run the job, done.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">// built for the shop, not the office</div>
+            <h2>No self-serve signup. No card on file.</h2>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="feature">
+            <span class="num">→</span>
+            <h3>Apply, don't sign up</h3>
+            <p>Tell us your coverage area and what you run. We follow up by phone or email — no forms that lock you into anything.</p>
+          </div>
+          <div class="feature">
+            <span class="num">→</span>
+            <h3>Payment off-platform</h3>
+            <p>We send payment instructions directly. Your login only exists after that's settled — nobody's card sits on a website.</p>
+          </div>
+          <div class="feature">
+            <span class="num">→</span>
+            <h3>Real contact info, every time</h3>
+            <p>Name, phone, job type, coverage area, and what you paid — logged in one running feed you can check from the truck.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" style="border-bottom:none;">
+      <div class="wrap">
+        <div class="panel">
+          <div class="panel-body" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px; padding:36px;">
+            <div>
+              <h2 style="margin-bottom:6px;">Ready to see what's in your area?</h2>
+              <p class="mb-0">Apply for coverage and we'll follow up with pricing for your bundle within one business day.</p>
+            </div>
+            <a href="/apply" class="btn">Apply For Coverage</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <%- include('partials/footer') %>
+</div>
+</body>
+</html>

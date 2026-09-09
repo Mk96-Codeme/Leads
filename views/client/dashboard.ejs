@@ -1,0 +1,79 @@
+<%- include('../partials/head', { title: 'Lead Feed — DispatchLeads' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'client', label: client.business_name }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/client-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1>Live Lead Feed</h1>
+          <div class="dash-sub">Coverage: <%= client.coverage_area %> &middot; Bundle: <%= fmt.BUNDLE_LABELS[client.bundle] || client.bundle %></div>
+        </div>
+        <span class="tag tag-live"><span class="live-dot"></span>Account Active</span>
+      </div>
+
+      <div class="stat-row">
+        <div class="stat-cell">
+          <div class="stat-num"><%= totalLeads %></div>
+          <div class="stat-label">Leads all-time</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= last30Count %></div>
+          <div class="stat-label">Leads, last 30 days</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= fmt.money(totalSpendCents) %></div>
+          <div class="stat-label">Total spend, all-time</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num"><%= client.status === 'active' ? 'Active' : client.status %></div>
+          <div class="stat-label">Account status</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <h2 class="panel-title"><span class="live-dot"></span>Leads Received</h2>
+          <span class="text-faint mono" style="font-size:11px;">newest first</span>
+        </div>
+        <div class="panel-body tight table-scroll">
+          <% if (leads.length === 0) { %>
+            <div class="empty-state">No leads yet. New leads will appear here the moment dispatch assigns one to you.</div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Received</th>
+                  <th>Coverage Area</th>
+                  <th>Job Type</th>
+                  <th>Contact</th>
+                  <th>Phone</th>
+                  <th class="text-right">Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% leads.forEach(lead => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(lead.received_at) %></td>
+                    <td><%= lead.coverage_area %></td>
+                    <td><%= lead.job_type %></td>
+                    <td><%= lead.contact_name %></td>
+                    <td class="mono"><%= lead.contact_phone %></td>
+                    <td class="text-right mono text-live"><%= fmt.money(lead.resale_cost_cents) %></td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <%- include('../partials/footer') %>
+</div>
+</body>
+</html>

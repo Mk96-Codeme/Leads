@@ -1,0 +1,105 @@
+<%- include('../partials/head', { title: 'Log New Lead — Admin' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'admin', label: 'Dispatch' }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/admin-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1>Log New Lead</h1>
+          <div class="dash-sub">Enter it once, assign to a client, apply markup</div>
+        </div>
+      </div>
+
+      <% if (errors && errors.length) { %>
+        <div class="form-errors">
+          <strong>Fix the following:</strong>
+          <ul><% errors.forEach(e => { %><li><%= e %></li><% }) %></ul>
+        </div>
+      <% } %>
+
+      <% if (clients.length === 0) { %>
+        <div class="panel"><div class="panel-body">
+          <p class="mb-0">You need at least one active client before you can log a lead. <a href="/admin/clients/new" style="color:var(--accent);">Create a client first.</a></p>
+        </div></div>
+      <% } else { %>
+        <form method="POST" action="/admin/leads/new" class="panel" style="padding:26px; max-width:760px;">
+
+          <div class="field">
+            <label for="client_id">Assign to client</label>
+            <select id="client_id" name="client_id" required>
+              <option value="">Select a client...</option>
+              <% clients.forEach(c => { %>
+                <option value="<%= c.id %>" <%= String(values.client_id) === String(c.id) ? 'selected' : '' %>>
+                  <%= c.business_name %> — <%= c.coverage_area %>
+                </option>
+              <% }) %>
+            </select>
+            <div class="field-hint">Match by coverage area. Only active clients are listed.</div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="coverage_area">Coverage area (this lead)</label>
+              <input type="text" id="coverage_area" name="coverage_area" value="<%= values.coverage_area || '' %>" required>
+            </div>
+            <div class="field">
+              <label for="job_type">Job type</label>
+              <input type="text" id="job_type" name="job_type" placeholder="e.g. Residential Lockout" value="<%= values.job_type || '' %>" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="contact_name">Contact name</label>
+              <input type="text" id="contact_name" name="contact_name" value="<%= values.contact_name || '' %>" required>
+            </div>
+            <div class="field">
+              <label for="contact_phone">Contact phone</label>
+              <input type="tel" id="contact_phone" name="contact_phone" value="<%= values.contact_phone || '' %>" required>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="contact_address">Contact address (optional)</label>
+            <input type="text" id="contact_address" name="contact_address" value="<%= values.contact_address || '' %>">
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="wholesale_cost">Wholesale cost (what you paid) — $</label>
+              <input type="number" step="0.01" min="0" id="wholesale_cost" name="wholesale_cost" value="<%= values.wholesale_cost || '' %>" required>
+            </div>
+            <div class="field">
+              <label for="resale_cost">Resale cost (what client is charged) — $</label>
+              <input type="number" step="0.01" min="0" id="resale_cost" name="resale_cost" value="<%= values.resale_cost || '' %>" required>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field">
+              <label for="received_at">Received at (optional — defaults to now)</label>
+              <input type="datetime-local" id="received_at" name="received_at" value="<%= values.received_at || '' %>">
+            </div>
+            <div class="field">
+              <label for="source">Source (optional)</label>
+              <input type="text" id="source" name="source" placeholder="e.g. EchoLocal" value="<%= values.source || '' %>">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="notes">Notes (optional, shown to admin only)</label>
+            <textarea id="notes" name="notes"><%= values.notes || '' %></textarea>
+          </div>
+
+          <button type="submit" class="btn">Assign &amp; Log Lead</button>
+        </form>
+      <% } %>
+    </main>
+  </div>
+</div>
+</body>
+</html>

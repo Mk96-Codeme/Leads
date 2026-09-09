@@ -1,0 +1,67 @@
+<%- include('../partials/head', { title: 'Applications — Admin' }) %>
+<body>
+<div class="site">
+  <%- include('../partials/dash-topnav', { role: 'admin', label: 'Dispatch' }) %>
+
+  <div class="dash-shell">
+    <%- include('../partials/admin-sidebar', { page }) %>
+
+    <main class="dash-main">
+      <div class="dash-header">
+        <div>
+          <h1>Applications</h1>
+          <div class="dash-sub">Interest form submissions from the public site</div>
+        </div>
+        <a href="/admin/clients/new" class="btn btn-outline">+ New Client</a>
+      </div>
+
+      <div class="panel">
+        <div class="panel-body tight table-scroll">
+          <% if (submissions.length === 0) { %>
+            <div class="empty-state">No applications yet.</div>
+          <% } else { %>
+            <table>
+              <thead>
+                <tr>
+                  <th>Submitted</th>
+                  <th>Name</th>
+                  <th>Business</th>
+                  <th>Coverage Area</th>
+                  <th>Bundle</th>
+                  <th>Contact</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% submissions.forEach(s => { %>
+                  <tr>
+                    <td class="mono text-faint"><%= fmt.dateTime(s.created_at) %></td>
+                    <td><%= s.name %></td>
+                    <td><%= s.business_name %></td>
+                    <td><%= s.coverage_area %></td>
+                    <td><%= fmt.BUNDLE_LABELS[s.bundle_interest] || s.bundle_interest %></td>
+                    <td><%= s.email %><br><span class="mono text-faint"><%= s.phone %></span></td>
+                    <td class="text-dim" style="max-width:220px;"><%= s.message || '—' %></td>
+                    <td>
+                      <form method="POST" action="/admin/interest/<%= s.id %>/status" style="margin:0;">
+                        <select name="status" onchange="this.form.submit()" style="width:auto; padding:6px 8px; font-size:12px;">
+                          <option value="new" <%= s.status === 'new' ? 'selected' : '' %>>New</option>
+                          <option value="contacted" <%= s.status === 'contacted' ? 'selected' : '' %>>Contacted</option>
+                          <option value="converted" <%= s.status === 'converted' ? 'selected' : '' %>>Converted</option>
+                          <option value="dismissed" <%= s.status === 'dismissed' ? 'selected' : '' %>>Dismissed</option>
+                        </select>
+                      </form>
+                    </td>
+                  </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          <% } %>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+</body>
+</html>
